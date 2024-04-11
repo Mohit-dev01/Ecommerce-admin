@@ -1,10 +1,12 @@
 "use client";
 
-import { useStoreModal } from "@/app/hooks/use-store-model"
-import { Modal } from "../ui/modal"
-import * as z from "zod"
-import { useForm } from "react-hook-form";
-import {zodResolver} from "@hookform/resolvers/zod"
+import { useStoreModal } from "@/app/hooks/use-store-model";
+import { Modal } from "../ui/modal";
+import * as z from "zod";
+import {  useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
+import { Input } from "../ui/input";
 
 // import { useStoreModal } from "@/app/hooks/use-store-model";
 // import { Modal } from "../ui/modal";
@@ -103,28 +105,49 @@ import {zodResolver} from "@hookform/resolvers/zod"
 //   );
 // };
 
-const formSchema = z.object(
-  {
-    name: z.string().min(1)
-  }
-)
+const formSchema = z.object({
+  name: z.string().min(1),
+});
 
 export const StoreModal = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues:{
-      name: ""
-    }
-  })
+    defaultValues: {
+      name: "",
+    },
+  });
 
-  const onSubmit = async (values:z.infer<typeof formSchema>) => {
-    console.log(values)
-  }
-  
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    console.log(values);
+  };
+
   const storeModal = useStoreModal();
-  return(
-    <Modal title="Create Store" description="do you want to add new store?" isOpen={storeModal.isOpen} onClose={storeModal.onClose}>
-      New Store
+  return (
+    <Modal
+      title="Create Store"
+      description="do you want to add new store?"
+      isOpen={storeModal.isOpen}
+      onClose={storeModal.onClose}
+    >
+    <div>
+      <div>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <FormField control={form.control} name="name" render={({field}) => {
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input/>
+                </FormControl>
+              </FormItem>
+            }}/>
+
+            
+          </form>
+
+        </Form>
+      </div>
+    </div>
     </Modal>
-  )
-}
+  );
+};
